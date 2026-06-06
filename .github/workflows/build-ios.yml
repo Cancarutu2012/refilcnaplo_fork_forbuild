@@ -14,26 +14,19 @@ jobs:
       - name: Flutter setup
         uses: subosito/flutter-action@v2
         with:
-              channel: stable
-              version: 3.22.3
+          channel: stable
+          version: 3.22.3
 
-      - name: Go to project
-        run: cd filcnaplo
-
-      - name: Flutter pub get (CRITICAL)
+      - name: Pub get
         run: |
           cd filcnaplo
           flutter clean
           flutter pub get
 
-      - name: Verify iOS generated files
-        run: |
-          ls filcnaplo/ios/Flutter
-
-      - name: Install Pods (ONLY AFTER pub get)
+      - name: CocoaPods install
         run: |
           cd filcnaplo/ios
-          pod install
+          pod install --repo-update
 
       - name: Build IPA
         run: |
