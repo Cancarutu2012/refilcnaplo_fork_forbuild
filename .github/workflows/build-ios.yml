@@ -11,10 +11,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Flutter
+      - name: Flutter setup
         uses: subosito/flutter-action@v2
         with:
-          channel: stable
+              channel: stable
+              version: 3.22.3
 
       - name: Go to project
         run: cd filcnaplo
