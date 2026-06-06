@@ -23,9 +23,13 @@ jobs:
           flutter pub get
           flutter precache --ios
 
-      - name: Install CocoaPods
+      - name: Force disable SPM
+        run: echo "FLUTTER_XCODE_SPM=0" >> $GITHUB_ENV
+
+      - name: Reset iOS build system
         run: |
           cd filcnaplo/ios
+          rm -rf Pods Podfile.lock .symlinks Flutter
           pod install --repo-update
 
       - name: Build IPA
