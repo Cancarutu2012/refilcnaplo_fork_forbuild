@@ -1,4 +1,4 @@
-name: Build iOS IPA2
+name: Build iOS IPA
 
 on:
   workflow_dispatch:
@@ -11,38 +11,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Flutter
+      - name: Flutter setup
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
       - name: Install dependencies
         run: |
-              cd filcnaplo
-              flutter pub get
+          cd filcnaplo
+          flutter pub get
 
-
-      - name: Disable Swift Package Manager
+      - name: Install CocoaPods
         run: |
-              defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
+          cd filcnaplo/ios
+          pod install
+          cd ..
 
-      - name: Clean iOS build
+      - name: Clean build
         run: |
-              cd filcnaplo
-              flutter clean
-              rm -rf ios/Pods
-              rm -rf ios/.symlinks
-              rm -rf ios/Flutter/Flutter.framework
-              rm -rf ios/Flutter/Flutter.podspec
+          cd filcnaplo
+          flutter clean
 
       - name: Build IPA
-      
-        run: | 
-              cd filcnaplo
-              flutter build ipa --release --no-codesign --no-tree-shake-icons
+        run: |
+          cd filcnaplo
+          flutter build ipa --release --no-codesign
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
           name: ios-ipa
-          path: build/ios/ipa/
+          path: filcnaplo/build/ios/ipa/
