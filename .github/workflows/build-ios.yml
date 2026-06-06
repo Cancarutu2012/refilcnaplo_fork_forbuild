@@ -32,6 +32,11 @@ jobs:
           cd filcnaplo
           flutter clean
 
+
+      - name: Disable Swift Package Manager
+        run: |
+              defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
+
       - name: Build IPA
         run: |
           cd filcnaplo
