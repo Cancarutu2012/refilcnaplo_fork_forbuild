@@ -23,19 +23,20 @@ jobs:
           flutter pub get
           flutter precache --ios
 
-      - name: Force disable SPM
-        run: echo "FLUTTER_XCODE_SPM=0" >> $GITHUB_ENV
+      - name: Force legacy Xcode mode
+        run: |
+          defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
 
       - name: Reset iOS build system
         run: |
           cd filcnaplo/ios
-          rm -rf Pods Podfile.lock .symlinks
+          rm -rf Pods Podfile.lock .symlinks Flutter
           pod install --repo-update
 
       - name: Build IPA
         run: |
           cd filcnaplo
-          flutter build ipa --release --no-codesign
+          flutter build ipa --release --no-codesign --no-tree-shake-icons
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
