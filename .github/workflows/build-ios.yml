@@ -11,32 +11,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Flutter setup
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
 
-      - name: Flutter clean + pub get + iOS setup
+      - name: Go to project
+        run: cd filcnaplo
+
+      - name: Flutter pub get (CRITICAL)
         run: |
           cd filcnaplo
           flutter clean
           flutter pub get
-          flutter precache --ios
 
-      - name: Force legacy Xcode mode
+      - name: Verify iOS generated files
         run: |
-          defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
+          ls filcnaplo/ios/Flutter
 
-      - name: Reset iOS build system
+      - name: Install Pods (ONLY AFTER pub get)
         run: |
           cd filcnaplo/ios
-          rm -rf Pods Podfile.lock .symlinks Flutter
-          pod install --repo-update
+          pod install
 
       - name: Build IPA
         run: |
           cd filcnaplo
-          flutter build ipa --release --no-codesign --no-tree-shake-icons
+          flutter build ipa --release --no-codesign
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
