@@ -8,31 +8,50 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout
+      # 1. Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Flutter setup
+      # 2. Flutter (STABIL, nem új)
+      - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
           version: 3.22.3
 
-      - name: Pub get
+      # 3. Clean + pub get
+      - name: Flutter clean & pub get
         run: |
           cd filcnaplo
           flutter clean
           flutter pub get
+          flutter precache --ios
 
-      - name: CocoaPods install
+      # 4. HARD iOS reset (ez kötelező)
+      - name: Reset iOS build system
+        run: |
+          cd filcnaplo
+          rm -rf ios/Pods
+          rm -rf ios/Podfile.lock
+          rm -rf ios/.symlinks
+          rm -rf ios/Flutter/Flutter.framework
+          rm -rf ios/Flutter/Generated.xcconfig
+
+      # 5. CocoaPods install (clean után!)
+      - name: Install CocoaPods
         run: |
           cd filcnaplo/ios
           pod install --repo-update
 
+      # 6. BUILD (SPM OFF)
       - name: Build IPA
         run: |
           cd filcnaplo
+          export FLUTTER_SUPPRESS_ANALYTICS=1
+          export DISABLE_SWIFT_PACKAGE_MANAGER=1
           flutter build ipa --release --no-codesign
 
+      # 7. Upload artifact
       - name: Upload IPA
         uses: actions/upload-artifact@v4
         with:
