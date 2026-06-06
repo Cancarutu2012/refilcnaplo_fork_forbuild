@@ -1,4 +1,4 @@
-name: Build iOS IPA
+name: Build iOS IPA2
 
 on:
   workflow_dispatch:
@@ -17,10 +17,15 @@ jobs:
           channel: stable
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+              cd filcnaplo
+              flutter pub get
 
       - name: Build IPA
-        run: flutter build ipa --release --no-codesign
+      
+        run: | 
+              cd filcnaplo
+              flutter build ipa --release --no-codesign
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
