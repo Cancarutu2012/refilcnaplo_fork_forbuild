@@ -42,6 +42,7 @@ jobs:
 
       # Install your project's dependencies
       - name: Install dependencies
+        working-directory: filcnaplo
         run: bash fix-pub.sh
 
       # Build and sign the ipa using a single flutter command
