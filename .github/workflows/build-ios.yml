@@ -21,26 +21,20 @@ jobs:
           cd filcnaplo
           flutter pub get
 
-      - name: Install CocoaPods
-        run: |
-          cd filcnaplo/ios
-          pod install
-          cd ..
-
-      - name: Clean build
+      - name: Clean Flutter build
         run: |
           cd filcnaplo
           flutter clean
 
-
-      - name: Disable Swift Package Manager
+      - name: Install CocoaPods
         run: |
-              defaults write com.apple.dt.Xcode IDEPackageSupportUseBuiltinSCM YES
+          cd filcnaplo/ios
+          pod install --repo-update
 
       - name: Build IPA
         run: |
           cd filcnaplo
-          flutter build ipa --release --no-codesign --no-tree-shake-icons
+          flutter build ipa --release --no-codesign
 
       - name: Upload IPA
         uses: actions/upload-artifact@v4
