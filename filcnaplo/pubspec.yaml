@@ -32,10 +32,7 @@ dependencies:
   http: ^0.13.3
   uuid: ^3.0.4
   html: ^0.15.0
-  open_file:
-    git:
-      url: https://github.com/crazecoder/open_file
-      ref: master
+  open_file: ^3.5.10
   path_provider: ^2.0.2
   permission_handler: ^10.2.0
   share_plus: ^7.0.2
